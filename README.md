@@ -1,6 +1,6 @@
-# Modified version 4.1b
+# Modified Version 4.1b
 
-<<<<<<< HEAD
+## Updates
 - Better management
 - Table relationship added to make it easy
 =======
