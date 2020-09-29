@@ -1,0 +1,28 @@
+# Rename it to config.py
+
+# Extensions to be loaded
+extensions = [
+    'jishaku',
+    'cogs.maker',
+    'cogs.editor',
+    'cogs.info',
+    'cogs.others',
+    'cogs.config',
+    'cogs.help',
+    'essentials.error_handler',
+    'essentials.events_handler',
+    'admin.admin',
+    'admin.info',
+    'essentials.runner'
+]
+
+# Postgresql DB config
+db_config = {
+    'host': 'host_here',
+    'database': 'database_name',
+    'user': 'database_user',
+    'password': 'user_password'
+}
+
+# which prefix should be assigned to new server
+default_prefix = "**"
