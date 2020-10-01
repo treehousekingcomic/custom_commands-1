@@ -3,7 +3,7 @@
 ## Updates
 - Better management
 - Table relationship added to make it easy
-=======
+
 ### Custom Command
 A discord bot that allow users to make custom commands per server [Read Docs Here](https://shahprog.github.io/docs/)
 
@@ -24,4 +24,3 @@ After all the upper steps done run the `bot.py` file.
 
 ### Contributors
 `AliTheKing#9129`
->>>>>>> c5fb3a3777085df8a19c0ef4ca5df81335360c01
