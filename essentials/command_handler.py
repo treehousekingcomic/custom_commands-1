@@ -116,6 +116,8 @@ class Runner:
             )
 
             title = await self.get_dynamic_string(ctx, data["title"])
+            if len(title) >= 256:
+                await ctx.send("This embed's title is larger than 256 character cant execute. Please edit the command or delete this and make a new one")
             description = await self.get_dynamic_string(ctx,  data["description"])
             thumbnail = await self.get_dynamic_string(ctx, data["thumbnail"])
             image = await self.get_dynamic_string(ctx, data["image"])
@@ -123,27 +125,32 @@ class Runner:
             description = await self.get_dynamic_string(ctx, description)
 
             embed = discord.Embed(
-                title=discord.utils.escape_mentions(title),
+                title=title,
                 description=discord.utils.escape_mentions(description),
                 color=discord.Color.blurple(),
             )
 
             pattern = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-            thumb = re.findall(pattern, thumbnail)
+            try:
+                thumb = re.findall(pattern, thumbnail)
 
-            if len(thumb) > 0:
-                try:
+                if len(thumb) > 0:
+                    try:
+                        embed.set_thumbnail(url=thumb[0][0])
+                    except:
+                        pass
+            except:
+                pass
 
-                    embed.set_thumbnail(url=thumb[0][0])
-                except:
-                    pass
-
-            img = re.findall(pattern, image)
-            if len(img) > 0:
-                try:
-                    embed.set_image(url=img[0][0])
-                except:
-                    pass
+            try:
+                img = re.findall(pattern, image)
+                if len(img) > 0:
+                    try:
+                        embed.set_image(url=img[0][0])
+                    except:
+                        pass
+            except:
+                pass
 
             if cmd_status == "no":
                 await ctx.send(embed=embed)

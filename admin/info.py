@@ -103,8 +103,11 @@ class Info(commands.Cog):
         des += "**Guilds** : " + str(len(self.bot.guilds)) + "\n"
         des += "**Commands Made** : " + str(len(ccmds)) + "\n"
         des += "**Users** : " + str(len(self.bot.users)) + "\n"
-
         des += "**Started** : " + humanize.naturaltime(self.bot.launch_time)
+
+        des += f"\n\n__**Since last reboot**__ \n"
+        des += f"**Command ran** : {self.bot.command_ran} times\n"
+        des += f"**Custom command ran** : {self.bot.custom_command_ran} times\n"
         des += f"\n\n*This bot has `{len(af)+1}` files containing `{line}` lines of code and `{str(cmds)}` commands!* \n\n"
 
         des += f"[Join Support Server](https://discord.gg/7SaE8v2)"

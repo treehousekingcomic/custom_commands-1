@@ -57,6 +57,10 @@ class Maker(commands.Cog):
             invalidate(self.bot, ctx.guild, ctx.author, name)
             return await ctx.send("Command creation cancelled and session destroyed.")
 
+        if len(title) >= 256:
+            invalidate(self.bot, ctx.guild, ctx.author, name)
+            return await ctx.send("Title can't be larger that 256 character. Command creation cancelled and session destroyed.")
+
         # Ask description
         embed_step = await ctx.send("Now type description.")
 
