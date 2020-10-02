@@ -119,8 +119,12 @@ class Runner:
             if len(title) >= 256:
                 await ctx.send("This embed's title is larger than 256 character cant execute. Please edit the command or delete this and make a new one")
             description = await self.get_dynamic_string(ctx,  data["description"])
-            thumbnail = await self.get_dynamic_string(ctx, data["thumbnail"])
-            image = await self.get_dynamic_string(ctx, data["image"])
+
+            if thumbnail := data["thumbnail"]:
+                thumbnail = await self.get_dynamic_string(ctx, data["thumbnail"])
+
+            if image := data["image"]:
+                image = await self.get_dynamic_string(ctx, data["image"])
 
             description = await self.get_dynamic_string(ctx, description)
 

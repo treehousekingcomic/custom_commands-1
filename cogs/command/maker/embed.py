@@ -144,32 +144,43 @@ class Maker(commands.Cog):
             isapproved = "no"
             note = "Wait for server managers to approve this command"
 
-        await self.bot.db.execute(
-            "INSERT INTO commands(userid, guild, name, type, approved) VALUES($1, $2, $3, 'embed', $4)",
-            ctx.author.id,
-            ctx.guild.id,
-            name,
-            isapproved,
-        )
+        try:
+            await self.bot.db.execute(
+                "INSERT INTO commands(userid, guild, name, type, approved) VALUES($1, $2, $3, 'embed', $4)",
+                ctx.author.id,
+                ctx.guild.id,
+                name,
+                isapproved,
+            )
 
-        data = await get_command(self.bot, name, ctx.guild.id)
+            data = await get_command(self.bot, name, ctx.guild.id)
 
-        id_ = data["id"]
-        await self.bot.db.execute(
-            "INSERT INTO embed(command_id, title, description, thumbnail, image) VALUES($1, $2, $3, $4, $5)",
-            id_,
-            title,
-            description,
-            thumb_url,
-            image_url,
-        )
+            id_ = data["id"]
+            try:
+                await self.bot.db.execute(
+                    "INSERT INTO embed(command_id, title, description, thumbnail, image) VALUES($1, $2, $3, $4, $5)",
+                    id_,
+                    title,
+                    description,
+                    thumb_url,
+                    image_url,
+                )
 
-        invalidate(self.bot, ctx.guild, ctx.author, name)
-        await ctx.send(f"Command created `{name}`. {note}")
+                invalidate(self.bot, ctx.guild, ctx.author, name)
+                await ctx.send(f"Command created `{name}`. {note}")
 
-        runner = command_handler.Runner(self.bot)
+                runner = command_handler.Runner(self.bot)
 
-        await runner.run_command(ctx, name=name, indm=False, bypass_check=False)
+                await runner.run_command(ctx, name=name, indm=False, bypass_check=False)
+            except Exception as e:
+                print(e)
+                print("Here")
+                await self.bot.db.execute("DELETE FROM commands WHERE id=$1", id_)
+                invalidate(self.bot, ctx.guild, ctx.author, name)
+                return await ctx.send("Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>")
+        except:
+            invalidate(self.bot, ctx.guild, ctx.author, name)
+            await ctx.send("Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>")
 
 
 def setup(bot):
