@@ -10,7 +10,7 @@ class Backup(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def backup(self, ctx):
+    async def backupall(self, ctx):
         mm = await ctx.send("Data backup initiated..")
         rows = 0
         data = {}
@@ -93,7 +93,7 @@ class Backup(commands.Cog):
                     }
                     commands_data[command['id']]['data'] = command_info
 
-                data[guild.id]['commands'] = commands_data
+
 
                 aliases = await self.bot.db.fetch("SELECT * FROM aliases WHERE cmd_id = $1", command['id'])
                 alias_data = {}
@@ -107,6 +107,8 @@ class Backup(commands.Cog):
                     }
 
                 commands_data[command['id']]['aliases'] = alias_data
+
+                data[guild.id]['commands'] = commands_data
 
         with open("data.json", 'w') as f:
             f.write("{}")
@@ -141,7 +143,7 @@ class Backup(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def restore(self, ctx):
+    async def restoreall(self, ctx):
         mm = await ctx.send('Restore data initiated.')
         rows = 0
         await self.bot.db.execute("DELETE FROM guild_data")
@@ -177,9 +179,10 @@ class Backup(commands.Cog):
             if variables:
                 rows += 1
                 for var_id, vdata in variables.items():
+                    print(vdata)
                     await self.bot.db.execute("INSERT INTO variables(name, value, guild, userid, editorid) VALUES ($1, $2, $3, $4, $5)", vdata['name'], vdata['value'], guild_id, vdata['userid'], vdata['editorid'])
 
-            await mm.edit(content=f"Successfully backed up {rows} rows of data.")
+        await mm.edit(content=f"Successfully restored {rows} rows of data.")
 
 def setup(bot):
     bot.add_cog(Backup(bot))

@@ -53,7 +53,11 @@ class Help(commands.Cog):
         desc += f"`{prefix}unapprove <command_name>` To unapprove an command.\n"
         desc += f"`{prefix}noprefix toggle` will turn on/off noprefix settings.\n"
         desc += f"`{prefix}ccprefix <new_prefix>` If you want different prefix for custom commands.\n"
-        desc += f"`{prefix}ccprefix reset` Will reset custom commands prefix."
+        desc += f"`{prefix}ccprefix reset` Will reset custom commands prefix.\n\n" \
+                f"__Backup and Restore__\n" \
+                f"This feature requires premium subscription \n\n" \
+                f"`{prefix}backup` Backup all your command and variables\n" \
+                f"`{prefix}restore <code>` Restore commands from a backup in any server\n" \
 
         embed = discord.Embed(
             color=discord.Color.blurple(),
