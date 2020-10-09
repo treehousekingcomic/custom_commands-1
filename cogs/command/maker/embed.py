@@ -89,9 +89,10 @@ class Maker(commands.Cog):
 
         thumb_url = embed_input.content
 
-        if thumb_url.lower() == "stop":
-            invalidate(self.bot, ctx.guild, ctx.author, name)
-            return await ctx.send("Command creation cancelled and session destroyed.")
+        if isinstance(thumb_url, str):
+            if thumb_url.lower() == "stop":
+                invalidate(self.bot, ctx.guild, ctx.author, name)
+                return await ctx.send("Command creation cancelled and session destroyed.")
 
         if thumb_url == "":
             if len(embed_input.attachments) > 0:
@@ -104,8 +105,9 @@ class Maker(commands.Cog):
             else:
                 pass
 
-        if thumb_url.lower() == "pass":
-            thumb_url = None
+        if isinstance(thumb_url, str):
+            if thumb_url.lower() == "pass":
+                thumb_url = None
 
         # Ask Image
         embed_step = await ctx.send(
@@ -120,9 +122,10 @@ class Maker(commands.Cog):
 
         image_url = embed_input.content
 
-        if image_url.lower() == "stop":
-            invalidate(self.bot, ctx.guild, ctx.author, name)
-            return await ctx.send("Command creation cancelled.")
+        if isinstance(image_url, str):
+            if image_url.lower() == "stop":
+                invalidate(self.bot, ctx.guild, ctx.author, name)
+                return await ctx.send("Command creation cancelled.")
 
         if not image_url:
             if len(embed_input.attachments) > 0:
@@ -134,8 +137,9 @@ class Maker(commands.Cog):
                     image_url = None
             else:
                 pass
-        if image_url.lower() == "pass":
-            image_url = None
+        if isinstance(image_url, str):
+            if image_url.lower() == "pass":
+                image_url = None
 
         if ctx.author.guild_permissions.manage_guild:
             isapproved = "yes"

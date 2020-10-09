@@ -152,7 +152,7 @@ class Editor(commands.Cog):
 
     @edit.command(name="text")
     async def text_(self, ctx, command: str, *, content: str):
-
+        note = ""
         data = await only_command_exists(self.bot, command, ctx.guild)
         if not data:
             return await ctx.send(f"A command with name `{command}` doesnt exists.")

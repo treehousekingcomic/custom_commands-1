@@ -1,4 +1,4 @@
-import discord
+import random
 from discord.ext import commands
 import asyncio
 
@@ -169,6 +169,22 @@ class Admin(commands.Cog):
         await ctx.send(
             f"All the command and group of `{cogg.qualified_name}` is enabled now"
         )
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def selectwinner(self, ctx, message_id: int):
+        message = await ctx.channel.fetch_message(message_id)
+        if not message:
+            return await ctx.send("Message not found.")
+
+        reactions = message.reactions[0]
+        participants = await reactions.users().flatten()
+
+        if len(participants) < 3:
+            return await ctx.send("Not qualified for giveaway.")
+
+        winner = random.choice(participants)
+        await ctx.send(f"The winner is {winner.mention}. ")
 
 
 def setup(bot):
