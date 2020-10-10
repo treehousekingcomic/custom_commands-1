@@ -1,8 +1,7 @@
 import discord
-from discord.ext import commands
 import asyncio
-import asyncpg
 import re
+from essentials.command_checks import get_command
 
 
 class Runner:
@@ -69,29 +68,9 @@ class Runner:
 
         return description
 
-    async def get_command(self, cmd_id):
-        data = await self.bot.db.fetchrow("SELECT * FROM commands WHERE id=$1", cmd_id)
-
-        return data
-
     async def run_command(self, ctx, name: str, indm: bool = True, bypass_check=False):
         # Check if command exists
-        try:
-            alias = await self.bot.db.fetchrow(
-                "SELECT * FROM aliases WHERE name = $1 and guild = $2",
-                name,
-                ctx.guild.id,
-            )
-            command = await self.bot.db.fetchrow(
-                "SELECT * FROM commands WHERE name = $1 and guild = $2",
-                name,
-                ctx.guild.id,
-            )
-
-            if alias:
-                command = await self.get_command(alias['cmd_id'])
-        except:
-            return
+        command = await get_command(ctx.bot, name, ctx.guild.id)
 
         if not command:
             return

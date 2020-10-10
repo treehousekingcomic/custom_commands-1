@@ -1,37 +1,3 @@
-# import subprocess
-# import sys
-
-# # Install all necessery packages
-# try:
-#     from halo import Halo
-# except:
-#     subprocess.call(
-#         [
-#             sys.executable,
-#             "-m",
-#             "pip",
-#             "install",
-#             "halo",
-#             "--quiet",
-#             "--disable-pip-version-check",
-#         ]
-#     )
-#     from halo import Halo
-
-# with Halo(text="Installing necessery packages", spinner="dots"):
-#     subprocess.call(
-#         [
-#             sys.executable,
-#             "-m",
-#             "pip",
-#             "install",
-#             "-r",
-#             "requirements.txt",
-#             "--no-index",
-#             "--quiet",
-#         ]
-#     )
-
 import discord
 from discord.ext import commands
 import asyncpg
@@ -40,6 +6,7 @@ import datetime
 import dotenv
 from config import extensions, db_config, default_prefix, query_strings
 from essentials import command_handler
+from essentials.core import getprefix
 from halo import Halo
 
 
@@ -76,13 +43,7 @@ class MyBot(commands.AutoShardedBot):
         self.command_ran += 1
 
     async def on_message(self, message):
-        if not message.guild:
-            return
-
-        if message.author == self.user:
-            return
-
-        if message.content == "":
+        if not message.guild or message.author == self.user or message.content == "":
             return
 
         await self.process_commands(message)
@@ -136,22 +97,6 @@ class MyBot(commands.AutoShardedBot):
         runner = command_handler.Runner(self)
 
         await runner.run_command(ctx, name=ccmd, indm=False, bypass_check=False)
-
-
-async def getprefix(bot, message):
-    try:
-        prefix = bot.prefixes[message.guild.id]
-        return prefix
-    except:
-        data = await bot.db.fetchrow(
-            "SELECT * FROM guild_data WHERE guild=$1", message.guild.id
-        )
-        if data:
-            prefix = data["prefix"]
-        else:
-            prefix = "**"
-
-    return prefix
 
 
 bot = MyBot(
