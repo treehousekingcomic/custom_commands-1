@@ -1,10 +1,10 @@
 # Extensions to be loaded
-maker_base = 'cogs.command.maker.'
-editor_base = 'cogs.command.editor.'
-command_base = 'cogs.command.'
-config_base = 'cogs.config.'
-management_base = 'cogs.management.'
-others_base = 'cogs.others.'
+maker_base = "cogs.command.maker."
+editor_base = "cogs.command.editor."
+command_base = "cogs.command."
+config_base = "cogs.config."
+management_base = "cogs.management."
+others_base = "cogs.others."
 
 extensions = [
     "jishaku",
@@ -26,11 +26,11 @@ extensions = [
     others_base + "help",
     others_base + "info",
     others_base + "others",
-    'essentials.error_handler',
-    'essentials.events_handler',
-    'admin.admin',
-    'admin.info',
-    'admin.keychecker',
+    "essentials.error_handler",
+    "essentials.events_handler",
+    "admin.admin",
+    "admin.info",
+    "admin.keychecker",
 ]
 
 # Postgresql DB config
@@ -144,5 +144,5 @@ query_strings = [
             created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             valid_till timestamp NOT NULL
         )
-    """
+    """,
 ]

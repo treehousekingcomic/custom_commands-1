@@ -11,7 +11,13 @@ class TopGG(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.token = os.getenv("DBL")  # set this to your DBL token
-        self.dblpy = dbl.DBLClient(self.bot, self.token, webhook_path='/dblwebhook', webhook_auth=os.getenv('WEBHOOK_AUTH'), webhook_port=5000)
+        self.dblpy = dbl.DBLClient(
+            self.bot,
+            self.token,
+            webhook_path="/dblwebhook",
+            webhook_auth=os.getenv("WEBHOOK_AUTH"),
+            webhook_port=5000,
+        )
         self.bot.dblpy = self.dblpy
         self.bot.token = self.token
 
@@ -23,7 +29,9 @@ class TopGG(commands.Cog):
             appinfo = await self.bot.application_info()
             owner = appinfo.owner
 
-            await owner.send('Failed to post server count\n{}: {}'.format(type(e).__name__, e))
+            await owner.send(
+                "Failed to post server count\n{}: {}".format(type(e).__name__, e)
+            )
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
@@ -33,7 +41,9 @@ class TopGG(commands.Cog):
             appinfo = await self.bot.application_info()
             owner = appinfo.owner
 
-            await owner.send('Failed to post server count\n{}: {}'.format(type(e).__name__, e))
+            await owner.send(
+                "Failed to post server count\n{}: {}".format(type(e).__name__, e)
+            )
 
     @commands.command()
     @commands.is_owner()
@@ -42,8 +52,9 @@ class TopGG(commands.Cog):
             await self.dblpy.post_guild_count()
             await ctx.send("Guild count updated successfully.")
         except Exception as e:
-            await ctx.send('Failed to post server count\n{}: {}'.format(type(e).__name__, e))
-
+            await ctx.send(
+                "Failed to post server count\n{}: {}".format(type(e).__name__, e)
+            )
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):

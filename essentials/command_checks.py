@@ -7,12 +7,18 @@ import discord
 async def command_exists(bot, command, guild):
     """Check for a commands existence return record or False according to existence"""
 
-    cmd = await bot.db.fetchrow("SELECT * FROM commands WHERE name = $1 and guild = $2", command, guild.id)
+    cmd = await bot.db.fetchrow(
+        "SELECT * FROM commands WHERE name = $1 and guild = $2", command, guild.id
+    )
     if cmd:
         return cmd
-    alias = await bot.db.fetchrow("SELECT * FROM aliases WHERE name = $1 and guild = $2", command, guild.id)
+    alias = await bot.db.fetchrow(
+        "SELECT * FROM aliases WHERE name = $1 and guild = $2", command, guild.id
+    )
     if alias:
-        command = await bot.db.fetchrow("SELECT * FROM commands WHERE id = $1", alias['cmd_id'])
+        command = await bot.db.fetchrow(
+            "SELECT * FROM commands WHERE id = $1", alias["cmd_id"]
+        )
         return command
     else:
         return False
@@ -21,7 +27,9 @@ async def command_exists(bot, command, guild):
 async def only_command_exists(bot, command, guild):
     """Check for a commands existence return record or False according to existence"""
 
-    cmd = await bot.db.fetchrow("SELECT * FROM commands WHERE name = $1 and guild = $2", command, guild.id)
+    cmd = await bot.db.fetchrow(
+        "SELECT * FROM commands WHERE name = $1 and guild = $2", command, guild.id
+    )
     if cmd:
         return cmd
     else:
@@ -31,7 +39,9 @@ async def only_command_exists(bot, command, guild):
 async def only_alias_exists(bot, command, guild):
     """Check for a alias existence return record or False according to existence"""
 
-    alias = await bot.db.fetchrow("SELECT * FROM aliases WHERE name = $1 and guild = $2", command, guild.id)
+    alias = await bot.db.fetchrow(
+        "SELECT * FROM aliases WHERE name = $1 and guild = $2", command, guild.id
+    )
     if alias:
         return alias
     else:
@@ -93,12 +103,18 @@ async def delete_command(bot, cmd_id: int):
 
 
 async def get_command(bot, name, guild_id):
-    data = await bot.db.fetchrow("SELECT * FROM commands WHERE name = $1 and guild = $2", name, guild_id)
+    data = await bot.db.fetchrow(
+        "SELECT * FROM commands WHERE name = $1 and guild = $2", name, guild_id
+    )
     alias = None
     if not data:
-        alias = await bot.db.fetchrow("SELECT * FROM aliases WHERE name = $1 and guild = $2", name, guild_id)
+        alias = await bot.db.fetchrow(
+            "SELECT * FROM aliases WHERE name = $1 and guild = $2", name, guild_id
+        )
 
     if alias:
-        data = await bot.db.fetchrow("SELECT * FROM commands WHERE id = $1", alias['cmd_id'])
+        data = await bot.db.fetchrow(
+            "SELECT * FROM commands WHERE id = $1", alias["cmd_id"]
+        )
 
     return data

@@ -25,18 +25,20 @@ class Editor(commands.Cog):
 
     @edit.command(name="command")
     async def command_(
-            self,
-            ctx,
-            component: str,
-            command: str,
-            *,
-            value: typing.Union[discord.Member, str],
+        self,
+        ctx,
+        component: str,
+        command: str,
+        *,
+        value: typing.Union[discord.Member, str],
     ):
         if data := await only_command_exists(self.bot, command, ctx.guild) is False:
             return await ctx.send(f"A command with name `{command}` doesnt exists.")
 
         if await only_alias_exists(self.bot, command, ctx.guild):
-            return await ctx.send(f'`{value}` is an alias. Cant be edited. Please edit the actual command.')
+            return await ctx.send(
+                f"`{value}` is an alias. Cant be edited. Please edit the actual command."
+            )
 
         if not data["userid"] == ctx.author.id:
             return await ctx.send("You are not the owner of this command.")
@@ -57,9 +59,7 @@ class Editor(commands.Cog):
             # checks if someone in the same server is in the middle of making a command with that name or not
             session = check_sessions(self.bot, ctx, value)
             if session[0]:
-                return await ctx.send(
-                    session[1]
-                )
+                return await ctx.send(session[1])
             else:
                 pass
 
@@ -79,7 +79,9 @@ class Editor(commands.Cog):
 
             if await only_alias_exists(self.bot, value, ctx.guild):
                 invalidate(self.bot, ctx.guild, ctx.author, value)
-                return await ctx.send(f'An alias with name `{value}` exists. Please use a different name.')
+                return await ctx.send(
+                    f"An alias with name `{value}` exists. Please use a different name."
+                )
 
             await self.bot.db.execute(
                 "UPDATE commands SET name=$1 WHERE id=$2", value, data["id"]
@@ -87,7 +89,9 @@ class Editor(commands.Cog):
 
             # After command making finish invalidate the session so no already making error occur
             invalidate(self.bot, ctx.guild, ctx.author, value)
-            return await ctx.send(f"Name editted of command from `{command}` to `{value}`.")
+            return await ctx.send(
+                f"Name editted of command from `{command}` to `{value}`."
+            )
 
         if component == "owner":
             if not isinstance(value, discord.Member):
@@ -107,10 +111,8 @@ class Editor(commands.Cog):
         if not data:
             return await ctx.send(f"A command with name `{command}` doesnt exists.")
 
-        if data['type'] != "embed":
-            return await ctx.send(
-                f"`{command}` is  not an embed command."
-            )
+        if data["type"] != "embed":
+            return await ctx.send(f"`{command}` is  not an embed command.")
 
         if not data["userid"] == ctx.author.id:
             return await ctx.send("You are not the owner of this command.")
@@ -157,10 +159,8 @@ class Editor(commands.Cog):
         if not data:
             return await ctx.send(f"A command with name `{command}` doesnt exists.")
 
-        if data['type'] != "text":
-            return await ctx.send(
-                f"`{command}` is  not a text command."
-            )
+        if data["type"] != "text":
+            return await ctx.send(f"`{command}` is  not a text command.")
 
         if not data["userid"] == ctx.author.id:
             return await ctx.send("You are not the owner of this command.")
@@ -186,10 +186,8 @@ class Editor(commands.Cog):
         if not data:
             return await ctx.send(f"A command with name `{command}` doesnt exists.")
 
-        if data['type'] != "role":
-            return await ctx.send(
-                f"`{command}` is  not a role command."
-            )
+        if data["type"] != "role":
+            return await ctx.send(f"`{command}` is  not a role command.")
 
         if not data["userid"] == ctx.author.id:
             return await ctx.send("You are not the owner of this command.")
@@ -217,12 +215,16 @@ class Editor(commands.Cog):
         if len(valids) < 1:
             reasons = "\n".join(reasons)
             return await ctx.send(
-                f'Command editing failed failed. \nReasons ->\n`{reasons}`.'
+                f"Command editing failed failed. \nReasons ->\n`{reasons}`."
             )
 
         note = ""
         if len(reasons) > 0:
-            note = "`Some roles where declined reasons below. \n" + "\n".join(reasons) + "`"
+            note = (
+                "`Some roles where declined reasons below. \n"
+                + "\n".join(reasons)
+                + "`"
+            )
 
         await self.bot.db.execute(
             "UPDATE role SET role=$1 WHERE command_id=$2", valids, data["id"]

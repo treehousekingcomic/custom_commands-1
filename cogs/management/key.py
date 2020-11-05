@@ -18,8 +18,7 @@ class ClientAdmin(commands.Cog):
 
     async def chek_used(self, key: str):
         res = await self.client.db.fetchrow(
-            "SELECT guild FROM keys WHERE key = $1",
-            key
+            "SELECT guild FROM keys WHERE key = $1", key
         )
         if res["guild"] == 0:
             return False
@@ -132,10 +131,11 @@ class ClientAdmin(commands.Cog):
         )
         if result:
             now = datetime.datetime.now()
-            delta = result['valid_till'] - now
+            delta = result["valid_till"] - now
             remain = Formatter().natural_delta(delta, as_string=True)
-            return await ctx.send("This server enjoying __Premium__. 🎉"
-                                  f"\n**Remaining :** {remain}")
+            return await ctx.send(
+                "This server enjoying __Premium__. 🎉" f"\n**Remaining :** {remain}"
+            )
         else:
             return await ctx.send(
                 "This server is not subscribed to premium. Join the official server to get premium."

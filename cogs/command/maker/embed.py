@@ -32,9 +32,9 @@ class Maker(commands.Cog):
             return await ctx.send(session_check[1])
 
         def check(message):
-            if (
-                message.author == ctx.author and message.channel == ctx.channel
-            ) and (message.content != "" or len(message.attachments) > 0):
+            if (message.author == ctx.author and message.channel == ctx.channel) and (
+                message.content != "" or len(message.attachments) > 0
+            ):
                 if message.content.lower().startswith(f"{ctx.prefix}"):
                     return False
                 else:
@@ -59,7 +59,9 @@ class Maker(commands.Cog):
 
         if len(title) >= 256:
             invalidate(self.bot, ctx.guild, ctx.author, name)
-            return await ctx.send("Title can't be larger that 256 character. Command creation cancelled and session destroyed.")
+            return await ctx.send(
+                "Title can't be larger that 256 character. Command creation cancelled and session destroyed."
+            )
 
         # Ask description
         embed_step = await ctx.send("Now type description.")
@@ -92,12 +94,25 @@ class Maker(commands.Cog):
         if isinstance(thumb_url, str):
             if thumb_url.lower() == "stop":
                 invalidate(self.bot, ctx.guild, ctx.author, name)
-                return await ctx.send("Command creation cancelled and session destroyed.")
+                return await ctx.send(
+                    "Command creation cancelled and session destroyed."
+                )
 
         if thumb_url == "":
             if len(embed_input.attachments) > 0:
                 thumb_url = embed_input.attachments[0].url
-                exts = ["jpg", "gif", "png", "webph", "jpeg", "JPEG", "JPG",  "PNG", "WEBPH", "GIF"]
+                exts = [
+                    "jpg",
+                    "gif",
+                    "png",
+                    "webph",
+                    "jpeg",
+                    "JPEG",
+                    "JPG",
+                    "PNG",
+                    "WEBPH",
+                    "GIF",
+                ]
                 if thumb_url.split(".")[-1] in exts:
                     pass
                 else:
@@ -130,7 +145,18 @@ class Maker(commands.Cog):
         if not image_url:
             if len(embed_input.attachments) > 0:
                 image_url = embed_input.attachments[0].url
-                exts = ["jpg", "gif", "png", "webph", "jpeg", "JPEG", "JPG", "PNG", "WEBPH", "GIF"]
+                exts = [
+                    "jpg",
+                    "gif",
+                    "png",
+                    "webph",
+                    "jpeg",
+                    "JPEG",
+                    "JPG",
+                    "PNG",
+                    "WEBPH",
+                    "GIF",
+                ]
                 if image_url.split(".")[-1] in exts:
                     pass
                 else:
@@ -181,10 +207,14 @@ class Maker(commands.Cog):
                 print("Here")
                 await self.bot.db.execute("DELETE FROM commands WHERE id=$1", id_)
                 invalidate(self.bot, ctx.guild, ctx.author, name)
-                return await ctx.send("Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>")
+                return await ctx.send(
+                    "Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>"
+                )
         except:
             invalidate(self.bot, ctx.guild, ctx.author, name)
-            await ctx.send("Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>")
+            await ctx.send(
+                "Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>"
+            )
 
 
 def setup(bot):

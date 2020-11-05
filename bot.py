@@ -28,14 +28,12 @@ class MyBot(commands.AutoShardedBot):
         self.cprefix = {}
 
         # Caching prefixes data
-        data = await self.db.fetch(
-            "SELECT * FROM guild_data"
-        )
+        data = await self.db.fetch("SELECT * FROM guild_data")
 
         for row in data:
-            self.prefixes[row['guild']] = row['prefix']
-            self.noprefix[row['guild']] = row['noprefix']
-            self.cprefix[row['guild']] = row['cprefix']
+            self.prefixes[row["guild"]] = row["prefix"]
+            self.noprefix[row["guild"]] = row["noprefix"]
+            self.cprefix[row["guild"]] = row["cprefix"]
 
         print(self.prefixes[700374484955299900])
 
@@ -47,7 +45,6 @@ class MyBot(commands.AutoShardedBot):
             return
 
         await self.process_commands(message)
-
 
         try:
             noprefix = bot.noprefix[message.guild.id]
@@ -74,22 +71,21 @@ class MyBot(commands.AutoShardedBot):
                 if cprefix:
                     prefix = cprefix
             else:
-                prefix = data['prefix']
-                cprefix = data['cprefix']
+                prefix = data["prefix"]
+                cprefix = data["cprefix"]
                 noprefix = data["noprefix"]
 
                 if cprefix:
                     prefix = cprefix
 
-
         if noprefix == "yes":
             if message.content.startswith(prefix):
-                ccmd = message.content[len(prefix):]
+                ccmd = message.content[len(prefix) :]
             else:
                 ccmd = message.content
         else:
             if message.content.startswith(prefix):
-                ccmd = message.content[len(prefix):]
+                ccmd = message.content[len(prefix) :]
             else:
                 return
 
@@ -112,8 +108,8 @@ async def create_db_pool():
         await bot.db.execute(query)
 
 
-
 bot.loop.run_until_complete(create_db_pool())
+
 log = ""
 with Halo(text="Loading Extensions", spinner="dots"):
     for extenstion in extensions:

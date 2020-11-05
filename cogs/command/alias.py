@@ -1,5 +1,10 @@
 from discord.ext import commands
-from essentials.command_checks import check_sessions, invalidate, only_command_exists, only_alias_exists
+from essentials.command_checks import (
+    check_sessions,
+    invalidate,
+    only_command_exists,
+    only_alias_exists,
+)
 
 
 class Maker(commands.Cog):
@@ -31,9 +36,7 @@ class Maker(commands.Cog):
             )
 
         if await only_command_exists(self.bot, alias, ctx.guild):
-            return await ctx.send(
-                f"A command with name `{alias}` already exists ."
-            )
+            return await ctx.send(f"A command with name `{alias}` already exists .")
 
         session_check = check_sessions(self.bot, ctx, alias)
         if session_check[0]:
@@ -44,7 +47,7 @@ class Maker(commands.Cog):
             alias,
             data["id"],
             ctx.author.id,
-            ctx.guild.id
+            ctx.guild.id,
         )
         invalidate(self.bot, ctx.guild, ctx.author, alias)
 

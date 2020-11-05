@@ -38,7 +38,9 @@ class Others(commands.Cog):
         ]
         indexes = ["A", "B", "C", "D"]
 
-        embed = discord.Embed(title=question,)
+        embed = discord.Embed(
+            title=question,
+        )
 
         desc = ""
         for i in range(0, len(options)):
@@ -58,7 +60,10 @@ class Others(commands.Cog):
 
     @commands.command()
     async def vote(self, ctx, question: str, duration: int, *, choices: str):
-        """Make vote (Not a command). Max choices is 4. Choices should be separated by comma. example : `**make vote "Are you happy today? 60 Yes,No,Not Sure,IDK"`"""
+        """Make vote (Not a command). Max choices is 4. Choices should be separated by comma.
+
+        example : `**make vote "Are you happy today? 60 Yes,No,Not Sure,IDK"`
+        """
         inits = [choice.strip() for choice in choices.split(",") if choice != ""]
         print(inits)
         options = []

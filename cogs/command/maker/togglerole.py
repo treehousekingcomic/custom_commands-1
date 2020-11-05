@@ -1,6 +1,11 @@
 import discord
 from discord.ext import commands
-from essentials.command_checks import command_exists, check_sessions, invalidate, get_command
+from essentials.command_checks import (
+    command_exists,
+    check_sessions,
+    invalidate,
+    get_command,
+)
 
 
 class Maker(commands.Cog):
@@ -74,7 +79,11 @@ class Maker(commands.Cog):
 
         note = ""
         if len(reasons) > 0:
-            note = "`Some roles where declined reasons below. \n" + "\n".join(reasons) + "`"
+            note = (
+                "`Some roles where declined reasons below. \n"
+                + "\n".join(reasons)
+                + "`"
+            )
 
         invalidate(self.bot, ctx.guild, ctx.author, name)
         await ctx.send(f"Command created `{name}`\n\n{note}")

@@ -1,6 +1,11 @@
 import discord
 from discord.ext import commands
-from essentials.command_checks import command_exists, check_sessions, invalidate, get_command
+from essentials.command_checks import (
+    command_exists,
+    check_sessions,
+    invalidate,
+    get_command,
+)
 
 
 class Maker(commands.Cog):
@@ -39,10 +44,15 @@ class Maker(commands.Cog):
 
         def can_add(role, bot):
             if bot.top_role < role:
-                return [False, "Bot's top role is lower than " + role.mention + " role. Cant add."]
+                return [
+                    False,
+                    "Bot's top role is lower than " + role.mention + " role. Cant add.",
+                ]
             if role.managed:
                 return [False, role.mention + " role is a managed role. Cant add."]
-            if ctx.author.top_role < role and ctx.author.guild_permissions(manage_roles=False):
+            if ctx.author.top_role < role and ctx.author.guild_permissions(
+                manage_roles=False
+            ):
                 return [False, role.mention + " is higher than your top role"]
             else:
                 return [True]
@@ -50,7 +60,9 @@ class Maker(commands.Cog):
         await ctx.send("[ + ]Mention the roles you want to add.")
         note = ""
         try:
-            msg : discord.Message = await self.bot.wait_for("message", timeout=60, check=check)
+            msg: discord.Message = await self.bot.wait_for(
+                "message", timeout=60, check=check
+            )
             for role in msg.role_mentions:
                 x = can_add(role, ctx.guild.get_member(self.bot.user.id))
                 if x[0]:
@@ -59,7 +71,9 @@ class Maker(commands.Cog):
                     note += x[1] + "\n"
             if len(gives) < 1:
                 invalidate(self.bot, ctx.guild, ctx.author, name)
-                return await ctx.send("None of the mentioned role can be managed by bot or you. Command creation cancelled, try again.")
+                return await ctx.send(
+                    "None of the mentioned role can be managed by bot or you. Command creation cancelled, try again."
+                )
             else:
                 added = ""
                 for role in set(gives):
@@ -77,7 +91,9 @@ class Maker(commands.Cog):
         await ctx.send("[ + ]Mention the roles you want to Remove.")
         note = ""
         try:
-            msg: discord.Message = await self.bot.wait_for("message", timeout=60, check=check)
+            msg: discord.Message = await self.bot.wait_for(
+                "message", timeout=60, check=check
+            )
             for role in msg.role_mentions:
                 x = can_add(role, ctx.guild.get_member(self.bot.user.id))
                 if x[0]:
@@ -86,7 +102,9 @@ class Maker(commands.Cog):
                     note += x[1] + "\n"
             if len(gives) < 1:
                 invalidate(self.bot, ctx.guild, ctx.author, name)
-                return await ctx.send("None of the mentioned role can be managed by bot or you. Command creation cancelled, try again.")
+                return await ctx.send(
+                    "None of the mentioned role can be managed by bot or you. Command creation cancelled, try again."
+                )
             else:
                 added = ""
                 for role in set(removes):
@@ -99,7 +117,6 @@ class Maker(commands.Cog):
             print(e)
             invalidate(self.bot, ctx.guild, ctx.author, name)
             return await ctx.send("Timeout")
-
 
         gives = [role.id for role in gives]
         removes = [role.id for role in removes]

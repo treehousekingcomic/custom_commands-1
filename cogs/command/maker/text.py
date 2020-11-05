@@ -2,7 +2,12 @@ import discord
 from discord.ext import commands
 import re
 from essentials import command_handler
-from essentials.command_checks import command_exists, check_sessions, invalidate, get_command
+from essentials.command_checks import (
+    command_exists,
+    check_sessions,
+    invalidate,
+    get_command,
+)
 
 
 class Maker(commands.Cog):
@@ -103,11 +108,14 @@ class Maker(commands.Cog):
                 print("Here")
                 await self.bot.db.execute("DELETE FROM commands WHERE id=$1", id_)
                 invalidate(self.bot, ctx.guild, ctx.author, name)
-                return await ctx.send("Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>")
+                return await ctx.send(
+                    "Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>"
+                )
         except:
             invalidate(self.bot, ctx.guild, ctx.author, name)
-            await ctx.send("Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>")
-
+            await ctx.send(
+                "Error creating command. Please join the support server and report this error. <https://discord.gg/7SaE8v2>"
+            )
 
 
 def setup(bot):

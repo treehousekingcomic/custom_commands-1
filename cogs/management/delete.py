@@ -1,6 +1,12 @@
 import discord
 from discord.ext import commands
-from essentials.command_checks import command_exists, check_sessions, invalidate, only_command_exists, only_alias_exists
+from essentials.command_checks import (
+    command_exists,
+    check_sessions,
+    invalidate,
+    only_command_exists,
+    only_alias_exists,
+)
 
 
 class Management(commands.Cog):
@@ -20,7 +26,9 @@ class Management(commands.Cog):
 
             if user == ctx.author.id or ctx.author.guild_permissions.administrator:
                 await self.bot.db.execute("DELETE FROM commands WHERE id=$1", cmd_id)
-                await ctx.send(f"Command `{name}` and all corresponding aliases deleted.")
+                await ctx.send(
+                    f"Command `{name}` and all corresponding aliases deleted."
+                )
             else:
                 await ctx.send("You can't delete this command!")
 

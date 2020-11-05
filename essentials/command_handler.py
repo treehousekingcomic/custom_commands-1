@@ -70,10 +70,16 @@ class Runner:
 
     async def run_command(self, ctx, name: str, indm: bool = True, bypass_check=False):
         # Check if command exists
+        parts = name.split(" ")
+        name = parts[0]
+        args = parts[1:]
+
         command = await get_command(ctx.bot, name, ctx.guild.id)
 
         if not command:
             return
+
+        print(args)
 
         self.bot.custom_command_ran += 1
 
@@ -96,8 +102,11 @@ class Runner:
 
             title = await self.get_dynamic_string(ctx, data["title"])
             if len(title) >= 256:
-                await ctx.send("This embed's title is larger than 256 character cant execute. Please edit the command or delete this and make a new one")
-            description = await self.get_dynamic_string(ctx,  data["description"])
+                await ctx.send(
+                    "This embed's title is larger than 256 character cant execute. "
+                    "Please edit the command or delete this and make a new one."
+                )
+            description = await self.get_dynamic_string(ctx, data["description"])
 
             if thumbnail := data["thumbnail"]:
                 thumbnail = await self.get_dynamic_string(ctx, data["thumbnail"])
@@ -150,6 +159,15 @@ class Runner:
             description = data["content"]
             msg = await self.get_dynamic_string(ctx, description)
 
+            async def replace_args(text):
+                for arg in args:
+                    to = "{" + str(args.index(arg) + 1) + "}"
+                    print(to)
+                    text = text.replace(to, arg)
+                return text
+
+            msg = await replace_args(msg)
+
             if cmd_status == "no":
                 await ctx.send(msg)
                 await ctx.send(
@@ -201,8 +219,8 @@ class Runner:
                 "SELECT * FROM multirole WHERE command_id=$1", cmd_id
             )
 
-            gives = data['gives']
-            removes = data['removes']
+            gives = data["gives"]
+            removes = data["removes"]
 
             for r in gives:
                 role = ctx.guild.get_role(r)

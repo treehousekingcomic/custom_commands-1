@@ -38,9 +38,7 @@ class Info(commands.Cog):
             rows = await self.bot.db.fetch(
                 "SELECT * FROM commands WHERE guild=$1", guild.id
             )
-            data = (
-                f"{guild.name} `({len(rows)})`"
-            )
+            data = f"{guild.name} `({len(rows)})`"
             guilds.append(data)
 
         pages = menus.MenuPages(source=MySource(guilds), clear_reactions_after=True)

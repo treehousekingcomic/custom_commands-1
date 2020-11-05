@@ -12,9 +12,7 @@ class MySource(menus.ListPageSource):
 
     async def format_page(self, menu, entries):
         offset = menu.current_page * self.per_page
-        embed = discord.Embed(
-            title=f"({self.title})", color=discord.Color.blurple()
-        )
+        embed = discord.Embed(title=f"({self.title})", color=discord.Color.blurple())
         description = "\n".join(
             f"{i+1}. {v}" for i, v in enumerate(entries, start=offset)
         )
@@ -30,13 +28,16 @@ class Info(commands.Cog):
         self.bot = bot
 
     async def get_aliases(self, command, guild):
-        aliases = await self.bot.db.fetch("SELECT aliases.name FROM commands INNER JOIN aliases ON aliases.cmd_id = commands.id WHERE commands.name=$1 and commands.guild=$2", command, guild.id)
-        aliases = [alias['name'] for alias in aliases]
+        aliases = await self.bot.db.fetch(
+            "SELECT aliases.name FROM commands INNER JOIN aliases ON aliases.cmd_id = commands.id WHERE commands.name=$1 and commands.guild=$2",
+            command,
+            guild.id,
+        )
+        aliases = [alias["name"] for alias in aliases]
         if len(aliases) > 0:
             return aliases
         else:
             return False
-
 
     @commands.command()
     async def list(self, ctx, flag: str = "approve  d"):
@@ -57,7 +58,7 @@ class Info(commands.Cog):
 
         cmds = []
         for row in data:
-            aliases = await self.get_aliases(row['name'], ctx.guild)
+            aliases = await self.get_aliases(row["name"], ctx.guild)
             if aliases:
                 cmds.append(row["name"] + f" `({len(aliases)} aliases)`")
             else:
@@ -66,7 +67,10 @@ class Info(commands.Cog):
         if len(cmds) == 0:
             return await ctx.send(f"There are no {flag.lower()} commands.")
         flag += " - " + str(len(cmds))
-        pages = menus.MenuPages(source=MySource(cmds, title=f"Commands {flag.lower()}"), clear_reactions_after=True)
+        pages = menus.MenuPages(
+            source=MySource(cmds, title=f"Commands {flag.lower()}"),
+            clear_reactions_after=True,
+        )
         await pages.start(ctx)
 
     @commands.command(name="raw")
@@ -187,7 +191,7 @@ class Info(commands.Cog):
         # Blank embed
         embed = discord.Embed(color=discord.Color.blurple())
 
-        cmd_maker = ctx.guild.get_member(data["userid"])
+        # cmd_maker = ctx.guild.get_member(data["userid"])
         cmd_id = data["id"]
         cmd_type = data["type"]
         cmd_name = prefix + data["name"]
@@ -200,8 +204,8 @@ class Info(commands.Cog):
 
         embed.title = f"{cmd_name} {state}"
 
-        if owner:
-            embed.add_field(name="Owner", value=cmd_maker.mention)
+        # if owner:
+        #     embed.add_field(name="Owner", value=cmd_maker.mention)
 
         aliases = await self.get_aliases(name, ctx.guild)
         if aliases and len(aliases) > 0:
@@ -229,12 +233,18 @@ class Info(commands.Cog):
                 action = data["action"]
 
                 if action == "give":
-                    description = f"Gives " + role_mentions + " role to command executor"
+                    description = (
+                        f"Gives " + role_mentions + " role to command executor"
+                    )
                 if action == "take":
-                    description = f"Removes " + role_mentions + " role to command executor"
+                    description = (
+                        f"Removes " + role_mentions + " role to command executor"
+                    )
                 if action == "toggle":
                     description = (
-                        f"Gives or removes " + role_mentions + " role to command executor"
+                        f"Gives or removes "
+                        + role_mentions
+                        + " role to command executor"
                     )
         else:
             description = cmd_help
