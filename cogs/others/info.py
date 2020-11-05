@@ -84,7 +84,7 @@ class Info(commands.Cog):
 
         cmd_type = data["type"]
 
-        owner = ctx.guild.get_member(data["userid"])
+        owner = data["userid"]  # ctx.guild.get_member(data["userid"])
 
         if cmd_type == "embed":
             data = await self.bot.db.fetchrow(
@@ -139,7 +139,7 @@ class Info(commands.Cog):
             else:
                 embed.add_field(name="Image", value=f"None", inline=False)
 
-            embed.add_field(name="Owner", value=owner.mention)
+            embed.add_field(name="Owner ID", value=str(owner))
 
         if cmd_type == "text":
             data = await self.bot.db.fetchrow(
@@ -154,25 +154,29 @@ class Info(commands.Cog):
                 value=discord.utils.escape_markdown(content),
                 inline=False,
             )
-            embed.add_field(name="Owner", value=owner.mention, inline=False)
+            embed.add_field(name="Owner ID", value=str(owner), inline=False)
 
         if cmd_type == "role":
             data = await self.bot.db.fetchrow(
                 "SELECT * FROM role WHERE command_id=$1", data["id"]
             )
-            role = ctx.guild.get_role(data["role"])
-            content = role.name + f" ({role.id})"
+            role = data["role"]
+            role = [ctx.guild.get_role(role_id) for role_id in role]
+
+            content = ""
+            for r in role:
+                content += r.mention
 
             embed = discord.Embed(title=f"Raw content of {command}")
             embed.add_field(name="Command type", value="Role", inline=False)
-            embed.add_field(name="Role", value=content, inline=False)
+            embed.add_field(name="Roles", value=content, inline=False)
             embed.add_field(
                 name="Action",
                 value=data["action"].replace("take", "remove") + "role",
                 inline=False,
             )
 
-            embed.add_field(name="Owner", value=owner.mention, inline=False)
+            embed.add_field(name="Owner ID", value=str(owner), inline=False)
 
         await ctx.send(embed=embed)
 
@@ -192,6 +196,7 @@ class Info(commands.Cog):
         embed = discord.Embed(color=discord.Color.blurple())
 
         # cmd_maker = ctx.guild.get_member(data["userid"])
+        owner = data["userid"]
         cmd_id = data["id"]
         cmd_type = data["type"]
         cmd_name = prefix + data["name"]
@@ -204,8 +209,8 @@ class Info(commands.Cog):
 
         embed.title = f"{cmd_name} {state}"
 
-        # if owner:
-        #     embed.add_field(name="Owner", value=cmd_maker.mention)
+        if owner:
+            embed.add_field(name="Owner ID", value=str(owner))
 
         aliases = await self.get_aliases(name, ctx.guild)
         if aliases and len(aliases) > 0:
