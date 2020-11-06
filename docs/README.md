@@ -58,6 +58,21 @@ Send a normal text.
 
 `Syntax ` \**edit text \<command_name> \<new_content>
 
+### Random
+Send random text
+
+`Syntax ` \**text \<command_name> \<content>
+
+`Example ` \**random myfirstrandom
+
+Then enter texts you want to show separated by `|`
+
+Example : Hello | Hi | What's up
+
+> Editing an text command
+
+This command has no edit facility. Might be added in future. 
+
 ### Role
 There are 3 type of role commands
 

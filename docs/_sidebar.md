@@ -4,6 +4,7 @@
 		* [- Embed](?id=embed)
 			* [Embed components](?id=embed-components)
 		* [- Text](?id=text)
+		* [- Random](?id=random)
 		* [- Role](?id=role)
 * Other usefull features
 	* [- Poll](?id=poll)
