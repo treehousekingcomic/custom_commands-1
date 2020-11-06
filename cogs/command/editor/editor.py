@@ -32,7 +32,8 @@ class Editor(commands.Cog):
         *,
         value: typing.Union[discord.Member, str],
     ):
-        if data := await only_command_exists(self.bot, command, ctx.guild) is False:
+        data = await only_command_exists(self.bot, command, ctx.guild)
+        if not data:
             return await ctx.send(f"A command with name `{command}` doesnt exists.")
 
         if await only_alias_exists(self.bot, command, ctx.guild):

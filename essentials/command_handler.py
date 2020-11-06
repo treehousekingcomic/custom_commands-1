@@ -187,6 +187,23 @@ class Runner:
             else:
                 await ctx.send(msg)
 
+        if cmd_type == "random":
+            data = await self.bot.db.fetchrow(
+                "SELECT * FROM randomtext WHERE command_id=$1", cmd_id
+            )
+            responses = data["contents"]
+
+            import random
+            msg = random.choice(responses)
+
+            if cmd_status == "no":
+                await ctx.send(msg)
+                await ctx.send(
+                    f"This command is not approved. Use `{ctx.prefix}approve {cmd_name}` to approve this command. Or `{ctx.prefix}delete {cmd_name}` to delete."
+                )
+            else:
+                await ctx.send(msg)
+
         if cmd_type == "role":
             data = await self.bot.db.fetchrow(
                 "SELECT * FROM role WHERE command_id=$1", cmd_id

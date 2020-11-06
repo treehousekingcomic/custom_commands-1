@@ -19,7 +19,7 @@ class Help(commands.Cog):
             description=f"Type `{prefix}help <command_type>` to get help on a specific type of command. [Complete Guideline](https://custom-commands-is.the-be.st)\n",
         )
 
-        available_commands = f"1. embed `{prefix}help embed` \n2. text `{prefix}help text`\n3. giverole `{prefix}help giverole`\n4. removerole `{prefix}help removerole`\n5. togglerole `{prefix}help togglerole`\n6. giveandremove `{prefix}help giveandremove`"
+        available_commands = f"1. embed `{prefix}help embed` \n2. text `{prefix}help text`\n3. giverole `{prefix}help giverole`\n4. removerole `{prefix}help removerole`\n5. togglerole `{prefix}help togglerole`\n6. giveandremove `{prefix}help giveandremove`\n7. random `{prefix}help random`"
         other_commands = f"1. poll `{prefix}help poll`\n2. vote `{prefix}help vote`"
 
         embed.add_field(name="Available command types", value=available_commands)
@@ -85,12 +85,12 @@ class Help(commands.Cog):
         await ctx.send(embed=embed)
 
     @help.command()
-    async def variables(self, ctx):
+    async def variable(self, ctx):
         prefix = ctx.prefix
         embed = discord.Embed(
             color=discord.Color.blurple(),
-            title="Help for `variables`",
-            description="Use variables to make command more interactive.",
+            title="Help for `variable`",
+            description="Use variable to make command more interactive.",
         )
 
         embed.description += "\n\n__Pre defined Variables__ :\n"
@@ -131,8 +131,24 @@ class Help(commands.Cog):
         embed.description += f"\n__Syntax__ \n`{prefix}text <command_name>` \nThen you will be prompted to enter contents of that command\n\n"
         embed.description += (
             "You can use variables like `{user}`, `{server}` and `{members}`. "
-            + f"\nTo get help on variables type `{prefix}help variables`"
+            + f"\nTo get help on variables type `{prefix}help variable`"
         )
+
+        await ctx.send(embed=embed)
+
+    @help.command()
+    async def random(self, ctx):
+        prefix = ctx.prefix
+        embed = discord.Embed(
+            color=discord.Color.blurple(),
+            title="Help for `text` commands",
+            description=f"Arguments wrapped with [] are optional, Argument wrapped with <> is compulsory.\n",
+        )
+
+        embed.description += f"\n__Syntax__ \n`{prefix}random <command_name>` \n" \
+                             f"Then you will be prompted to enter contents of that command. " \
+                             f"Which will be same as text but here you can have multiple responses. " \
+                             f"Be sure to separate them using `|`\n\n"
 
         await ctx.send(embed=embed)
 

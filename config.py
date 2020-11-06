@@ -15,6 +15,7 @@ extensions = [
     maker_base + "giveremove",
     maker_base + "text",
     maker_base + "maker",
+    maker_base + "randomresponse",
     editor_base + "editor",
     command_base + "alias",
     command_base + "variables",
@@ -83,6 +84,13 @@ query_strings = [
             id SERIAL PRIMARY KEY,
             command_id BIGINT NOT NULL,
             content TEXT NOT NULL
+    )
+    """,
+    """
+        CREATE TABLE IF NOT EXISTS randomtext(
+            id SERIAL PRIMARY KEY,
+            command_id BIGINT NOT NULL,
+            contents TEXT[] NOT NULL
     )
     """,
     """

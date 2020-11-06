@@ -41,7 +41,8 @@ class Variables(commands.Cog):
         if name.startswith("{") and name.endswith("}"):
             if await self.var_exists(name, ctx.guild):
                 return await ctx.send(
-                    f"A variable with the name `{name}` already exists. Please choose a different name or edit that with new content."
+                    f"A variable with the name `{name}` already exists. "
+                    f"Please choose a different name or edit that with new content."
                 )
 
             if name == value:

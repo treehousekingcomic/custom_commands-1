@@ -156,6 +156,21 @@ class Info(commands.Cog):
             )
             embed.add_field(name="Owner ID", value=str(owner), inline=False)
 
+        if cmd_type == "random":
+            data = await self.bot.db.fetchrow(
+                "SELECT * FROM randomtext WHERE command_id=$1", data["id"]
+            )
+            content = data["contents"]
+
+            embed = discord.Embed(title=f"Raw content of {command}")
+            embed.add_field(name="Command type", value="Text", inline=False)
+            embed.add_field(
+                name="Content",
+                value=discord.utils.escape_markdown("\n".join(content)),
+                inline=False,
+            )
+            embed.add_field(name="Owner ID", value=str(owner), inline=False)
+
         if cmd_type == "role":
             data = await self.bot.db.fetchrow(
                 "SELECT * FROM role WHERE command_id=$1", data["id"]
@@ -223,6 +238,9 @@ class Info(commands.Cog):
 
             if cmd_type == "text":
                 description = "Sends a text message"
+
+            if cmd_type == "text":
+                description = "Sends random responses"
 
             if cmd_type == "role":
                 data = await self.bot.db.fetchrow(
