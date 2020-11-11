@@ -80,12 +80,22 @@ class Backup(commands.Cog):
                     command_info = {"content": text["content"]}
                     commands_data[command["id"]]["data"] = command_info
 
+                if command["type"] == "random":
+                    text = await self.bot.db.fetchrow(
+                        "SELECT * FROM randomtext WHERE command_id = $1", command["id"]
+                    )
+                    command_info = {"contents": text["contents"]}
+                    commands_data[command["id"]]["data"] = command_info
+
                 if command["type"] == "role":
                     role = await self.bot.db.fetchrow(
                         "SELECT * FROM role WHERE command_id = $1", command["id"]
                     )
-                    command_info = {"role": role["role"], "action": role["action"]}
-                    commands_data[command["id"]]["data"] = command_info
+                    if role:
+                        command_info = {"role": role["role"], "action": role["action"]}
+                        commands_data[command["id"]]["data"] = command_info
+                    else:
+                        print(command['id'])
 
                 if command["type"] == "mrl":
                     role = await self.bot.db.fetchrow(
@@ -156,13 +166,23 @@ class Backup(commands.Cog):
                 data["content"],
             )
 
-        if type == "role":
+        if type == "random":
             await self.bot.db.execute(
-                "INSERT INTO role (command_id, role, action) VALUES ($1, $2, $3)",
+                "INSERT INTO randomtext (command_id, contents) VALUES ($1, $2)",
                 command_id,
-                data["role"],
-                data["action"],
+                data["contents"],
             )
+
+        if type == "role":
+            try:
+                await self.bot.db.execute(
+                    "INSERT INTO role (command_id, role, action) VALUES ($1, $2, $3)",
+                    command_id,
+                    data["role"],
+                    data["action"],
+                )
+            except:
+                print(data)
 
         if type == "mrl":
             await self.bot.db.execute(
@@ -227,7 +247,6 @@ class Backup(commands.Cog):
             if variables:
                 rows += 1
                 for var_id, vdata in variables.items():
-                    print(vdata)
                     await self.bot.db.execute(
                         "INSERT INTO variables(name, value, guild, userid, editorid) VALUES ($1, $2, $3, $4, $5)",
                         vdata["name"],

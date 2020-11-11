@@ -79,8 +79,6 @@ class Runner:
         if not command:
             return
 
-        print(args)
-
         self.bot.custom_command_ran += 1
 
         if command["approved"] == "no" and (
@@ -153,6 +151,7 @@ class Runner:
                 await ctx.send(embed=embed)
 
         if cmd_type == "text":
+
             data = await self.bot.db.fetchrow(
                 "SELECT * FROM text WHERE command_id=$1", cmd_id
             )
@@ -162,19 +161,22 @@ class Runner:
             async def replace_args(text):
                 for arg in args:
                     to = "{" + str(args.index(arg) + 1) + "}"
-                    print(to)
                     text = text.replace(to, arg)
+
                 return text
 
             msg = await replace_args(msg)
+            xx = "{1...}"
+            yyy = " ".join(args)
+            msg = msg.replace(xx, yyy)
 
             def make_arg(x):
                 return "{" + str(x) + "}"
 
             valid_args = [make_arg(x) for x in range(100)]
-            print("Hello", valid_args)
+
             for valid_arg in valid_args:
-                if valid_arg in msg:
+                if valid_arg in msg or '{1...}' in msg:
                     return await ctx.send(
                         "1 or more argument is required to make this command work which is missing. "
                     )
@@ -195,6 +197,7 @@ class Runner:
 
             import random
             msg = random.choice(responses)
+            msg = await self.get_dynamic_string(ctx, msg)
 
             if cmd_status == "no":
                 await ctx.send(msg)

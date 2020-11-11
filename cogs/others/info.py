@@ -239,7 +239,7 @@ class Info(commands.Cog):
             if cmd_type == "text":
                 description = "Sends a text message"
 
-            if cmd_type == "text":
+            if cmd_type == "random":
                 description = "Sends random responses"
 
             if cmd_type == "role":

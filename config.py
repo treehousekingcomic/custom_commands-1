@@ -153,4 +153,13 @@ query_strings = [
             valid_till timestamp NOT NULL
         )
     """,
+
+    """
+        CREATE TABLE IF NOT EXISTS roles(
+            id serial PRIMARY KEY,
+            guild bigint NOT NULL,
+            name TEXT NOT NULL,
+            role BIGSERIAL NOT NULL
+        )
+    """,
 ]

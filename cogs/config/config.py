@@ -30,7 +30,6 @@ class Config(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, new_prefix: str):
         await self.get_data(ctx.guild.id)
-        self.bot.prefixes[ctx.guild.id] = new_prefix
         await self.bot.db.execute(
             "UPDATE guild_data SET prefix=$1 WHERE guild=$2", new_prefix, ctx.guild.id
         )
@@ -40,7 +39,6 @@ class Config(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def ccprefix(self, ctx, new_prefix: str):
         await self.get_data(ctx.guild.id)
-        self.bot.cprefix[ctx.guild.id] = new_prefix
         await self.bot.db.execute(
             "UPDATE guild_data SET cprefix=$1 WHERE guild=$2", new_prefix, ctx.guild.id
         )
@@ -50,7 +48,6 @@ class Config(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def reset(self, ctx):
         await self.get_data(ctx.guild.id)
-        self.bot.cprefix[ctx.guild.id] = None
         await self.bot.db.execute(
             "UPDATE guild_data SET cprefix=$1 WHERE guild=$2", None, ctx.guild.id
         )
@@ -86,12 +83,10 @@ class Config(commands.Cog):
                 f"Custom commands will execute only with prefix before them."
             )
         else:
-            self.bot.noprefix[ctx.guild.id] = "yes"
             await self.bot.db.execute(
                 "UPDATE guild_data SET noprefix=$1 WHERE guild=$2", "yes", ctx.guild.id
             )
             await ctx.send(f"Custom commands will execute with or without prefix.")
-
 
 def setup(bot):
     bot.add_cog(Config(bot))

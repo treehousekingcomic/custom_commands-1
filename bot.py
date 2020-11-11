@@ -16,26 +16,19 @@ class MyBot(commands.AutoShardedBot):
         self.guild_cache = []
 
     async def on_ready(self):
-        print(
-            f"{str(self.user)} started successfully. latency is {self.latency * 1000}ms"
-        )
         self.launch_time = datetime.datetime.now()
         self.command_ran = 0
         self.custom_command_ran = 0
 
-        self.prefixes = {}
-        self.noprefix = {}
-        self.cprefix = {}
+        await self.db.execute("DELETE FROM roles")
+        for g in self.guilds:
+            for role in g.roles:
+                if not role.managed and role.name != '@everyone':
+                    await self.db.execute("INSERT INTO roles (guild, name, role) VALUES ($1, $2, $3)", g.id, role.name, role.id)
 
-        # Caching prefixes data
-        data = await self.db.fetch("SELECT * FROM guild_data")
-
-        for row in data:
-            self.prefixes[row["guild"]] = row["prefix"]
-            self.noprefix[row["guild"]] = row["noprefix"]
-            self.cprefix[row["guild"]] = row["cprefix"]
-
-        print(self.prefixes[700374484955299900])
+        print(
+            f"{str(self.user)} started successfully. latency is {self.latency * 1000}ms"
+        )
 
     async def on_command(self, ctx):
         self.command_ran += 1
@@ -46,37 +39,27 @@ class MyBot(commands.AutoShardedBot):
 
         await self.process_commands(message)
 
-        try:
-            noprefix = bot.noprefix[message.guild.id]
-            cprefix = bot.cprefix[message.guild.id]
-            prefix = bot.prefixes[message.guild.id]
-            if cprefix is not None:
-                prefix = cprefix
+        data = await self.db.fetchrow(
+            "SELECT * FROM guild_data WHERE guild=$1", message.guild.id
+        )
 
-        except:
-            data = await self.db.fetchrow(
-                "SELECT * FROM guild_data WHERE guild=$1", message.guild.id
+        if data is None:
+            await self.db.execute(
+                "INSERT INTO guild_data(guild, prefix) VALUES($1, $2)",
+                message.guild.id,
+                default_prefix,
             )
 
-            if data is None:
-                await self.db.execute(
-                    "INSERT INTO guild_data(guild, prefix) VALUES($1, $2)",
-                    message.guild.id,
-                    default_prefix,
-                )
+            prefix = default_prefix
+            noprefix = "no"
+            cprefix = None
+        else:
+            prefix = data["prefix"]
+            cprefix = data["cprefix"]
+            noprefix = data["noprefix"]
 
-                prefix = default_prefix
-                noprefix = "no"
-                cprefix = None
-                if cprefix:
-                    prefix = cprefix
-            else:
-                prefix = data["prefix"]
-                cprefix = data["cprefix"]
-                noprefix = data["noprefix"]
-
-                if cprefix:
-                    prefix = cprefix
+            if cprefix:
+                prefix = cprefix
 
         if noprefix == "yes":
             if message.content.startswith(prefix):

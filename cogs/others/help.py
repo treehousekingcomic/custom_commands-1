@@ -16,7 +16,8 @@ class Help(commands.Cog):
         embed = discord.Embed(
             color=discord.Color.blurple(),
             title="Help for Custom Commands",
-            description=f"Type `{prefix}help <command_type>` to get help on a specific type of command. [Complete Guideline](https://custom-commands-is.the-be.st)\n",
+            description=f"Type `{prefix}help <command_type>` to get help on a specific type of command. \n\n"
+                        f"Or go to [Web Dashboard](https://customcommands.xyz) and start making commands\n",
         )
 
         available_commands = f"1. embed `{prefix}help embed` \n2. text `{prefix}help text`\n3. giverole `{prefix}help giverole`\n4. removerole `{prefix}help removerole`\n5. togglerole `{prefix}help togglerole`\n6. giveandremove `{prefix}help giveandremove`\n7. random `{prefix}help random`"
