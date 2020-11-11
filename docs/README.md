@@ -59,17 +59,19 @@ Send a normal text.
 `Syntax ` \**edit text \<command_name> \<new_content>
 
 ### Random
-Send random text
+Send random text from choices 
 
-`Syntax ` \**text \<command_name> \<content>
+`Syntax ` \**text \<command_name> \<choices>
 
 `Example ` \**random myfirstrandom
 
-Then enter texts you want to show separated by `|`
+For choices enter what you want separated by `|`
 
-Example : Hello | Hi | What's up
+`Example :` Hello | Hi | What's up
 
-> Editing an text command
+`^-` The command will repond with one of the choices above.
+
+> Editing an random command
 
 This command has no edit facility. Might be added in future. 
 
